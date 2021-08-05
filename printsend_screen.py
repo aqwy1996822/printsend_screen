@@ -68,7 +68,7 @@ if __name__=="__main__":
     night_start=args.ns
     night_end = args.ne
     program_name='Anaconda Powershell Prompt (anaconda3)'
-    fujian_path="C:/Users/"+user_name+"/"+program_name + ".jpg"
+    fujian_path="C:/Users/"+user_name+"/"+program_name + ".png"
     old_mousepos=win32api.GetCursorPos()
     while True:
         mousepos=win32api.GetCursorPos()
@@ -79,7 +79,7 @@ if __name__=="__main__":
                 img_ready = get_window_pos(program_name)
                 if not img_ready==None:
                     img_ready.save(fujian_path)
-                    email_sender.send("画面来源 \t "+hostname+" \t "+user_name+" \t "+program_name,[fujian_path])
+                    email_sender.send(["时间:%s:%s"%(str(datetime.now().hour),str(datetime.now().minute)),"电脑名:"+hostname,"用户名:"+user_name,"程序名"+program_name],[fujian_path])
                 else:
                     print(program_name,"未找到")
             else:
