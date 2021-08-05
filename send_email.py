@@ -15,16 +15,29 @@ class Email:
     def send(self,sendtext, fujian_list,delete_fujian=True, email_from='发送端',email_to='接受端',email_subject='发送端实时信息',receivers = ['626237248@qq.com']):
 
         # 创建一个带附件的实例
-        message = MIMEMultipart()
-        message['From'] = Header(email_from, 'utf-8')
-        message['To'] = Header(email_to, 'utf-8')
+        msgRoot = MIMEMultipart('related')
+        msgRoot['From'] = Header(email_from, 'utf-8')
+        msgRoot['To'] = Header(email_to, 'utf-8')
         subject = email_subject
-        message['Subject'] = Header(subject, 'utf-8')
-        receivers=receivers
+        msgRoot['Subject'] = Header(subject, 'utf-8')
+
+        msgAlternative = MIMEMultipart('alternative')
+        msgRoot.attach(msgAlternative)
         # 邮件正文内容
-        message.attach(MIMEText(sendtext, 'plain', 'utf-8'))
+
+        mail_msg = "<p>"+sendtext+"</p><p><img src='cid:image1'></p>"
+        msgAlternative.attach(MIMEText(mail_msg, 'html', 'utf-8'))
+
+        #html中加入图片
+        msgImage = MIMEText(open(fujian_list[0], 'rb').read(), 'base64', 'utf-8')
+        # 定义图片 ID，在 HTML 文本中引用
+        msgImage.add_header('Content-ID', '<image1>')
+        msgRoot.attach(msgImage)
+
+        #加入附件
         for fujian_path in fujian_list:
-            # 构造附件1，传送当前目录下的 test.txt 文件
+
+            # 构造附件，传送当前目录下的 test.txt 文件
             att1 = MIMEText(open(fujian_path, 'rb').read(), 'base64', 'utf-8')
             att1["Content-Type"] = 'application/octet-stream'
             if '/' in fujian_path:
@@ -35,7 +48,7 @@ class Email:
                 filename = fujian_path
             # 这里的filename可以任意写，写什么名字，邮件中显示什么名字
             att1["Content-Disposition"] = 'attachment; filename="'+filename+'"'
-            message.attach(att1)
+            msgRoot.attach(att1)
             if delete_fujian:
                 os.remove(fujian_path)
 
@@ -43,7 +56,7 @@ class Email:
             smtpObj = smtplib.SMTP()
             smtpObj.connect(self.mail_host, 25)  # 25 为 SMTP 端口号
             smtpObj.login(self.mail_user, self.mail_pass)
-            smtpObj.sendmail(self.sender, receivers, message.as_string())
+            smtpObj.sendmail(self.sender, receivers, msgRoot.as_string())
             print("发送成功")
             return True
         except smtplib.SMTPException:
