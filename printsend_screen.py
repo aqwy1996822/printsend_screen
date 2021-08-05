@@ -40,8 +40,7 @@ def get_window_pos(name):
     handle = win32gui.FindWindow(0, name)
     #获取窗口句柄
     if handle == 0:
-        img_ready = ImageGrab.grab()
-        return img_ready
+        return None
     else:
         win32gui.SendMessage(handle, win32con.WM_SYSCOMMAND, win32con.SC_RESTORE, 0)
         win32gui.SetForegroundWindow(handle)
@@ -85,6 +84,9 @@ if __name__=="__main__":
                     print(program_name,"未找到")
             else:
                 print(time_step_min,"分钟内有鼠标移动，不干扰操作")
+                email_sender.send(
+                    ["时间:%s:%s" % (str(datetime.now().hour), str(datetime.now().minute)), "电脑名:" + hostname,
+                     "用户名:" + user_name, "正在使用，请勿打扰"], [])
             old_mousepos = mousepos
             print("等待", time_step_min, '分钟后再次尝试推送')
         else:
