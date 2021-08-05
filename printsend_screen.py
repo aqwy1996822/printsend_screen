@@ -79,13 +79,13 @@ if __name__=="__main__":
                 img_ready = get_window_pos(program_name)
                 if not img_ready==None:
                     img_ready.save(fujian_path)
-                    email_sender.send(["时间:%s:%s"%(str(datetime.now().hour),str(datetime.now().minute)),"电脑名:"+hostname,"用户名:"+user_name,"程序名"+program_name],[fujian_path])
+                    email_sender.send(["电脑名:"+hostname,"用户名:"+user_name,"程序名"+program_name],[fujian_path])
                 else:
                     print(program_name,"未找到")
             else:
                 print(time_step_min,"分钟内有鼠标移动，不干扰操作")
                 email_sender.send(
-                    ["时间:%s:%s" % (str(datetime.now().hour), str(datetime.now().minute)), "电脑名:" + hostname,
+                    ["电脑名:" + hostname,
                      "用户名:" + user_name, "正在使用，请勿打扰"], [])
             old_mousepos = mousepos
             print("等待", time_step_min, '分钟后再次尝试推送')
