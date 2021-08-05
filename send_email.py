@@ -59,6 +59,6 @@ class Email:
             smtpObj.sendmail(self.sender, receivers, msgRoot.as_string())
             print("发送成功")
             return True
-        except smtplib.SMTPException:
+        except:
             print("Error: 发送失败")
             return False

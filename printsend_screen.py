@@ -55,10 +55,8 @@ def get_window_pos(name):
         win32gui.ShowWindow(handle, win32con.SW_MINIMIZE)
         return img_ready
 if __name__=="__main__":
-
-
     parser = argparse.ArgumentParser()
-    parser.add_argument('-t', type=float, default=0.1, help='time_step to print and send screen')
+    parser.add_argument('-t', type=float, default=30, help='time_step to print and send screen')
     parser.add_argument('-ns', type=int, default=1, help='night start clock')
     parser.add_argument('-ne', type=int, default=9, help='night end clock')
     args = parser.parse_args()
@@ -87,6 +85,8 @@ if __name__=="__main__":
             else:
                 print(time_step_min,"分钟内有鼠标移动，不干扰操作")
             old_mousepos = mousepos
+            print("等待", time_step_min, '分钟后再次尝试推送')
         else:
             print("现在"+str(timehour)+"点 是暂停推送的夜间时段:",str(night_start)+':00-'+str(night_end)+":00 区间")
         time.sleep(60 * time_step_min)
+
