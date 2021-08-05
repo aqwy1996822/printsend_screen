@@ -40,7 +40,8 @@ def get_window_pos(name):
     handle = win32gui.FindWindow(0, name)
     #获取窗口句柄
     if handle == 0:
-        return None
+        img_ready = ImageGrab.grab()
+        return img_ready
     else:
         win32gui.SendMessage(handle, win32con.WM_SYSCOMMAND, win32con.SC_RESTORE, 0)
         win32gui.SetForegroundWindow(handle)
