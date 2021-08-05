@@ -81,7 +81,9 @@ if __name__=="__main__":
                     img_ready.save(fujian_path)
                     email_sender.send(["电脑名:"+hostname,"用户名:"+user_name,"程序名"+program_name],[fujian_path])
                 else:
-                    print(program_name,"未找到")
+                    email_sender.send(
+                        ["电脑名:" + hostname,
+                         "用户名:" + user_name, "没有找到%s"%program_name], [])
             else:
                 print(time_step_min,"分钟内有鼠标移动，不干扰操作")
                 email_sender.send(
